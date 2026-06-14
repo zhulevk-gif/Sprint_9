@@ -1,0 +1,21 @@
+services:
+  selenoid:
+    image: aerokube/selenoid:latest-release
+    container_name: selenoid
+    ports:
+      - "4444:4444"
+    volumes:
+      - ./selenoid:/etc/selenoid:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: ["-conf", "/etc/selenoid/browsers.json", "-container-network", "${COMPOSE_PROJECT_NAME:-foodgram-tests}_default"]
+
+  tests:
+    build: .
+    depends_on:
+      - selenoid
+    environment:
+      BASE_URL: https://foodgram-frontend-1.foodgram.education-services.ru
+      SELENOID_URI: http://selenoid:4444/wd/hub
+      BROWSER_VERSION: "128.0"
+    volumes:
+      - ./allure-results:/app/allure-results

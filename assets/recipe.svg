@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240" viewBox="0 0 320 240">
+  <rect width="320" height="240" fill="#fff4d6"/>
+  <circle cx="160" cy="120" r="72" fill="#f28c28"/>
+  <circle cx="135" cy="95" r="10" fill="#ffffff"/>
+  <circle cx="185" cy="95" r="10" fill="#ffffff"/>
+  <path d="M125 145 Q160 175 195 145" stroke="#ffffff" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <text x="160" y="222" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#5f3b00">Foodgram autotest</text>
+</svg>
