@@ -1,15 +1,18 @@
+import allure
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
-
-from locators.base_locators import BaseLocators
 
 
 class BasePage:
     def __init__(self, driver, base_url: str, timeout: int = 10):
         self._driver = driver
         self._base_url = base_url.rstrip("/")
-        self._wait = WebDriverWait(driver, timeout, ignored_exceptions=(StaleElementReferenceException,))
+        self._wait = WebDriverWait(
+            driver,
+            timeout,
+            ignored_exceptions=(StaleElementReferenceException,),
+        )
 
     @property
     def driver(self):
@@ -19,24 +22,14 @@ class BasePage:
     def base_url(self):
         return self._base_url
 
+    @allure.step("Открыть страницу: {path}")
     def open(self, path: str = ""):
         self._driver.get(f"{self._base_url}{path}")
 
+    @allure.step("Проверить, что текущий URL содержит: {text}")
     def current_url_contains(self, text: str) -> bool:
         self._wait.until(ec.url_contains(text))
         return text in self._driver.current_url
-
-    def click_create_account(self):
-        self._click(BaseLocators.CREATE_ACCOUNT_LINK)
-
-    def click_login(self):
-        self._click(BaseLocators.LOGIN_LINK)
-
-    def click_create_recipe(self):
-        self._click(BaseLocators.CREATE_RECIPE_LINK)
-
-    def is_logout_button_visible(self) -> bool:
-        return self._is_visible(BaseLocators.LOGOUT_LINK)
 
     def _find_visible(self, locator):
         return self._wait.until(ec.visibility_of_element_located(locator))
@@ -56,11 +49,6 @@ class BasePage:
             return True
 
         self._wait.until(click_when_ready)
-
-    def _js_click_present(self, locator):
-        element = self._find_present(locator)
-        self._driver.execute_script("arguments[0].click();", element)
-
 
     def _click_text(self, text: str):
         script = """

@@ -4,8 +4,9 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-from page_objects.base_page import BasePage
+from constants import BASE_URL, RECIPES_URL_PART, SIGNIN_URL_PART
 from page_objects.login_page import LoginPage
+from page_objects.main_page import MainPage
 from page_objects.registration_page import RegistrationPage
 from page_objects.recipe_page import RecipePage
 from test_data.user_data import unique_user
@@ -13,7 +14,7 @@ from test_data.user_data import unique_user
 
 @pytest.fixture
 def base_url():
-    return os.getenv("BASE_URL", "https://foodgram-frontend-1.foodgram.education-services.ru")
+    return BASE_URL
 
 
 @pytest.fixture
@@ -40,8 +41,8 @@ def driver():
 
 
 @pytest.fixture
-def base_page(driver, base_url):
-    return BasePage(driver, base_url)
+def main_page(driver, base_url):
+    return MainPage(driver, base_url)
 
 
 @pytest.fixture
@@ -60,22 +61,26 @@ def recipe_page(driver, base_url):
 
 
 @pytest.fixture
-def registered_user(base_page, registration_page):
+def registered_user(main_page, registration_page, login_page):
     user = unique_user()
-    base_page.open()
-    base_page.click_create_account()
+
+    main_page.open()
+    main_page.open_registration_page()
     registration_page.register(user)
-    login_page = LoginPage(base_page.driver, base_page.base_url)
-    login_page.current_url_contains("signin")
+
+    login_page.current_url_contains(SIGNIN_URL_PART)
     login_page.is_login_form_visible()
+
     return user
 
 
 @pytest.fixture
-def authorized_user(base_page, login_page, registered_user):
-    base_page.open()
-    base_page.click_login()
+def authorized_user(main_page, login_page, registered_user):
+    main_page.open()
+    main_page.open_login_page()
     login_page.login(registered_user)
-    base_page.current_url_contains("recipes")
-    base_page.is_logout_button_visible()
+
+    main_page.current_url_contains(RECIPES_URL_PART)
+    main_page.is_logout_button_visible()
+
     return registered_user
