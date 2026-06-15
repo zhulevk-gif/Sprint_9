@@ -1,0 +1,4 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","2412","Зарегистрированный пользователь может авторизоваться","test","2026-06-15","passed","2026-06-15","TestLogin","test_login","",""
+"","5368","Авторизованный пользователь может создать рецепт","test","2026-06-15","passed","2026-06-15","TestRecipeCreation","test_recipe","",""
+"","4655","После регистрации пользователь попадает на страницу авторизации","test","2026-06-15","passed","2026-06-15","TestRegistration","test_registration","",""
